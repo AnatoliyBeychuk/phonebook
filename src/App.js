@@ -1,6 +1,6 @@
 import { Component } from "react";
-import { nanoid } from "nanoid";
 import "./App.css";
+import { Container } from "./App.styled";
 import ContactForm from "./components/ContactForm/ContactForm";
 import Filter from "./components/Filter/Filter";
 import ContactList from "./components/ContactList/ContactList";
@@ -8,8 +8,7 @@ import ContactList from "./components/ContactList/ContactList";
 class App extends Component {
   state = {
     contacts: [],
-    name: "",
-    number: "",
+    filter: "",
   };
 
   handleInputChange = (value, name) => {
@@ -18,35 +17,57 @@ class App extends Component {
     });
   };
 
-  handleAddContact = () => {
+  onContactsFilter = (array, filter) => {
+    const normalizedFilter = filter.toLowerCase();
+    return array.filter((contact) =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
+
+  findDuplicateContact = (array, filter) => {
+    const normalizedFilter = filter.toLowerCase();
+    return array.filter(
+      (contact) => contact.name.toLowerCase() === normalizedFilter
+    );
+  };
+
+  handleAddContact = (contact) => {
     this.setState((prevState) => {
-      return {
-        contacts: [
-          ...prevState.contacts,
-          { id: nanoid(), name: prevState.name, number: prevState.number },
-        ],
-        name: "",
-        number: "",
-      };
+      const { name } = contact;
+      const { contacts } = prevState;
+      const filteredArray = this.findDuplicateContact(contacts, name);
+      if (filteredArray.length > 0) {
+        alert(`${name} is already in contacts.`);
+      } else {
+        return {
+          contacts: [...prevState.contacts, contact],
+        };
+      }
     });
   };
 
+  deleteContact = (contactId) => {
+    this.setState(({ contacts }) => ({
+      contacts: contacts.filter(({ id }) => id !== contactId),
+    }));
+  };
+
   render() {
-    const { contacts, name, number } = this.state;
+    const { contacts, filter } = this.state;
+
+    const filteredArray = this.onContactsFilter(contacts, filter);
 
     return (
-      <div>
+      <Container>
         <h1>Phonebook</h1>
-        <ContactForm
-          inputNameValue={name}
-          inputNumberValue={number}
-          handleInputChange={this.handleInputChange}
-          handleAddContact={this.handleAddContact}
-        />
+        <ContactForm handleAddContact={this.handleAddContact} />
         <h2>Contacts</h2>
-        <Filter />
-        <ContactList contacts={contacts} />
-      </div>
+        <Filter filter={filter} handleInputChange={this.handleInputChange} />
+        <ContactList
+          contacts={filteredArray}
+          deleteContact={this.deleteContact}
+        />
+      </Container>
     );
   }
 }
