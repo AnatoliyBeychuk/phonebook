@@ -7,6 +7,11 @@ class Filter extends Component {
   //   filter: "",
   // };
 
+  static propTypes = {
+    filter: PropTypes.string.isRequired,
+    handleInputChange: PropTypes.func.isRequired,
+  };
+
   handleChange = (value, name, callback) => {
     // this.setState((prevState) => {
     //   return { ...prevState, [name]: value };
@@ -34,10 +39,5 @@ class Filter extends Component {
     );
   }
 }
-
-Filter.propTypes = {
-  filter: PropTypes.string.isRequired,
-  handleInputChange: PropTypes.func.isRequired,
-};
 
 export default Filter;

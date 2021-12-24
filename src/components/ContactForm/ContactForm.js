@@ -11,6 +11,10 @@ class ContactForm extends Component {
     isInputNumberEmpty: true,
   };
 
+  static propTypes = {
+    handleAddContact: PropTypes.func.isRequired,
+  };
+
   handleChange = (value, tag, name) => {
     this.setState({ [name]: value, [tag]: !value.trim() });
   };
@@ -78,9 +82,5 @@ class ContactForm extends Component {
     );
   }
 }
-
-ContactForm.propTypes = {
-  handleAddContact: PropTypes.func.isRequired,
-};
 
 export default ContactForm;
