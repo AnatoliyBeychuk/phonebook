@@ -15,8 +15,8 @@ class ContactForm extends Component {
     handleAddContact: PropTypes.func.isRequired,
   };
 
-  handleChange = (value, tag, name) => {
-    this.setState({ [name]: value, [tag]: !value.trim() });
+  handleChange = (value, name) => {
+    this.setState({ [name]: value });
   };
 
   onAddContact = (callback) => {
@@ -28,14 +28,16 @@ class ContactForm extends Component {
     this.setState({
       name: "",
       number: "",
-      isInputNameEmpty: true,
-      isInputNumberEmpty: true,
     });
   };
 
   render() {
     const { handleAddContact } = this.props;
-    const { isInputNameEmpty, isInputNumberEmpty, name, number } = this.state;
+    const { name, number } = this.state;
+
+    const isInputNameEmpty = !name;
+    const isInputNumberEmpty = !number;
+
     return (
       <Container>
         <Field>
@@ -48,7 +50,7 @@ class ContactForm extends Component {
             required
             onChange={(event) => {
               const { value, name } = event.target;
-              this.handleChange(value, "isInputNameEmpty", name);
+              this.handleChange(value, name);
             }}
             value={name}
           />
@@ -64,7 +66,7 @@ class ContactForm extends Component {
             required
             onChange={(event) => {
               const { value, name } = event.target;
-              this.handleChange(value, "isInputNumberEmpty", name);
+              this.handleChange(value, name);
             }}
             value={number}
           />
