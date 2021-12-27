@@ -7,8 +7,6 @@ class ContactForm extends Component {
   state = {
     name: "",
     number: "",
-    isInputNameEmpty: true,
-    isInputNumberEmpty: true,
   };
 
   static propTypes = {
